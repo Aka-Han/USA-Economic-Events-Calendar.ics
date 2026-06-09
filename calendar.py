@@ -2,8 +2,6 @@
 from __future__ import annotations
 
 import json
-import re
-import sys
 import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -16,15 +14,13 @@ SOURCE_URLS = [
 
 OUTPUT_FILE = Path("calendar.ics")
 
-CALENDAR_NAME = "ZXSK Forex Factory USD High Impact"
+CALENDAR_NAME = "Live Economic Calendar - USD High Impact"
 FF_URL = "https://www.forexfactory.com/calendar"
 LOCATION = "Forex Factory"
 
-# 设置筛选条件
 KEEP_CURRENCIES = {"USD"}
 KEEP_IMPACTS = {"High"}
 
-# 你可以加更多关键词，避免漏掉重要讲话
 IMPORTANT_KEYWORDS = [
     "CPI", "Core CPI", "PPI", "Core PPI", "PCE", "Core PCE",
     "Non-Farm", "Nonfarm", "NFP", "Unemployment", "Average Hourly",
@@ -46,26 +42,25 @@ def fetch_json() -> list[dict]:
                 },
             )
             with urlopen(req, timeout=30) as resp:
-                data = resp.read().decode("utf-8")
-                return json.loads(data)
+                return json.loads(resp.read().decode("utf-8"))
         except Exception as e:
             last_error = e
     raise RuntimeError(f"Could not fetch Forex Factory JSON: {last_error}")
 
 def clean_text(value) -> str:
-    if value is None:
-        return ""
-    return str(value).strip()
+    return "" if value is None else str(value).strip()
 
 def escape_ics(text: str) -> str:
-    text = text.replace("\\", "\\\\")
-    text = text.replace(";", r"\;")
-    text = text.replace(",", r"\,")
-    text = text.replace("\r\n", "\n").replace("\r", "\n").replace("\n", r"\n")
-    return text
+    return (
+        text.replace("\\", "\\\\")
+        .replace(";", r"\;")
+        .replace(",", r"\,")
+        .replace("\r\n", "\n")
+        .replace("\r", "\n")
+        .replace("\n", r"\n")
+    )
 
 def fold_ics_line(line: str) -> str:
-    # RFC 5545 recommends 75 octets; this is a simple unicode-safe fold.
     max_len = 73
     if len(line) <= max_len:
         return line
@@ -77,32 +72,24 @@ def fold_ics_line(line: str) -> str:
     return "\r\n".join(parts)
 
 def parse_datetime(item: dict) -> datetime | None:
-    """
-    Forex Factory feed usually has ISO-like date fields, but the exact key can vary.
-    This function tries common keys.
-    """
     for key in ("date", "datetime", "timestamp"):
         val = item.get(key)
         if not val:
             continue
 
-        # Numeric unix timestamp
         if isinstance(val, (int, float)):
             return datetime.fromtimestamp(val, tz=timezone.utc)
 
         s = str(val).strip()
 
-        # ISO format with Z
         try:
-            iso = s.replace("Z", "+00:00")
-            dt = datetime.fromisoformat(iso)
+            dt = datetime.fromisoformat(s.replace("Z", "+00:00"))
             if dt.tzinfo is None:
                 dt = dt.replace(tzinfo=timezone.utc)
             return dt.astimezone(timezone.utc)
         except Exception:
             pass
 
-        # Try common string formats
         for fmt in (
             "%Y-%m-%dT%H:%M:%S%z",
             "%Y-%m-%d %H:%M:%S%z",
@@ -116,7 +103,19 @@ def parse_datetime(item: dict) -> datetime | None:
                 return dt.astimezone(timezone.utc)
             except Exception:
                 continue
+
     return None
+
+def get_impact(item: dict) -> str:
+    impact = clean_text(item.get("impact") or item.get("importance"))
+    low = impact.lower()
+    if low in {"high impact expected", "red", "3"}:
+        return "High"
+    if low in {"medium impact expected", "orange", "2"}:
+        return "Medium"
+    if low in {"low impact expected", "yellow", "1"}:
+        return "Low"
+    return impact
 
 def event_title(item: dict) -> str:
     title = (
@@ -129,17 +128,6 @@ def event_title(item: dict) -> str:
     currency = clean_text(item.get("currency"))
     return f"{currency} {clean_text(title)}".strip()
 
-def get_impact(item: dict) -> str:
-    impact = clean_text(item.get("impact") or item.get("importance"))
-    # Normalize common feed values
-    if impact.lower() in {"high impact expected", "red", "3"}:
-        return "High"
-    if impact.lower() in {"medium impact expected", "orange", "2"}:
-        return "Medium"
-    if impact.lower() in {"low impact expected", "yellow", "1"}:
-        return "Low"
-    return impact
-
 def should_keep(item: dict) -> bool:
     currency = clean_text(item.get("currency")).upper()
     impact = get_impact(item)
@@ -148,34 +136,11 @@ def should_keep(item: dict) -> bool:
         return False
 
     if KEEP_IMPACTS and impact not in KEEP_IMPACTS:
-        # If impact label changes but keyword is important, keep it.
         title = event_title(item).lower()
         if not any(k.lower() in title for k in IMPORTANT_KEYWORDS):
             return False
 
     return True
-
-def build_description(item: dict) -> str:
-    title = event_title(item)
-    forecast = clean_text(item.get("forecast")) or "Forex Factory 当天页面为准"
-    previous = clean_text(item.get("previous")) or "Forex Factory 当天页面为准"
-    actual = clean_text(item.get("actual")) or "未公布"
-    currency = clean_text(item.get("currency"))
-    impact = get_impact(item) or "High"
-    country = clean_text(item.get("country"))
-
-    explanation = explain_event(title)
-
-    return (
-        f"Forecast: {forecast}\n"
-        f"Previous: {previous}\n"
-        f"Actual: {actual}\n"
-        f"Currency: {currency}\n"
-        f"Country: {country}\n"
-        f"Impact: {impact}\n"
-        f"说明: {explanation}\n"
-        f"备注: Forecast / Previous / Actual 会随 Forex Factory feed 更新；交易前请打开 URL 复核。"
-    )
 
 def explain_event(title: str) -> str:
     t = title.lower()
@@ -203,12 +168,32 @@ def explain_event(title: str) -> str:
         return "初请失业金；高频劳动力市场指标。"
     return "High impact macro event；实际影响取决于结果与市场预期差。"
 
+def build_description(item: dict) -> str:
+    title = event_title(item)
+    forecast = clean_text(item.get("forecast")) or "Forex Factory 当天页面为准"
+    previous = clean_text(item.get("previous")) or "Forex Factory 当天页面为准"
+    actual = clean_text(item.get("actual")) or "未公布"
+    currency = clean_text(item.get("currency"))
+    impact = get_impact(item) or "High"
+    country = clean_text(item.get("country"))
+
+    return (
+        f"Forecast: {forecast}\n"
+        f"Previous: {previous}\n"
+        f"Actual: {actual}\n"
+        f"Currency: {currency}\n"
+        f"Country: {country}\n"
+        f"Impact: {impact}\n"
+        f"说明: {explain_event(title)}\n"
+        f"备注: Forecast / Previous / Actual 会随 Forex Factory feed 更新；交易前请打开 URL 复核。"
+    )
+
 def create_ics(events: list[dict]) -> str:
     now = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
-        "PRODID:-//ZXSK//ForexFactory Calendar//EN",
+        "PRODID:-//LiveEconomicCalendar//ForexFactory//EN",
         "CALSCALE:GREGORIAN",
         "METHOD:PUBLISH",
         f"X-WR-CALNAME:{escape_ics(CALENDAR_NAME)}",
@@ -218,6 +203,7 @@ def create_ics(events: list[dict]) -> str:
     ]
 
     seen = set()
+
     for item in events:
         if not should_keep(item):
             continue
@@ -234,7 +220,7 @@ def create_ics(events: list[dict]) -> str:
 
         end_dt = start_dt + timedelta(minutes=30)
         uid_seed = f"{start_dt.isoformat()}-{title}"
-        uid = f"{uuid.uuid5(uuid.NAMESPACE_URL, uid_seed)}@zxsk-ff-calendar"
+        uid = f"{uuid.uuid5(uuid.NAMESPACE_URL, uid_seed)}@live-economic-calendar"
 
         lines.extend([
             "BEGIN:VEVENT",

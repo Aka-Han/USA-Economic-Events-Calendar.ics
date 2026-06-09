@@ -1,11 +1,11 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//ZXSK//ForexFactory Calendar Placeholder//EN
+PRODID:-//LiveEconomicCalendar//Placeholder//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-X-WR-CALNAME:ZXSK Forex Factory USD High Impact
+X-WR-CALNAME:Live Economic Calendar - USD High Impact
 BEGIN:VEVENT
-UID:placeholder@zxsk-ff-calendar
+UID:placeholder@live-economic-calendar
 DTSTAMP:20260608T000000Z
 DTSTART:20260608T160000Z
 DTEND:20260608T163000Z

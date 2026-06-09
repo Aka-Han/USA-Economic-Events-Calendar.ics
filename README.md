@@ -1,14 +1,30 @@
-# USD Economic Events Calendar
+# Live Economic Calendar
 
-这个仓库会自动生成一个可订阅的经济日历 ICS
+Public calendar page:
 
-## 功能
+```text
+https://aka-han.github.io/ZXSK/
+```
 
-- 每 6 小时自动更新
-- 默认只保留 High Impact 事件
-- 默认只保留 USD 事件
-- 每个事件包含：
-  - DESCRIPTION: Forecast / Previous / Impact / Currency / 说明
-- 默认提醒：
-  - 30 分钟前
-  - 5 分钟前
+ICS subscription URL:
+
+```text
+https://aka-han.github.io/ZXSK/calendar.ics
+```
+
+## What it does
+
+- Updates every 6 hours with GitHub Actions
+- Uses the Forex Factory weekly JSON feed
+- Filters for USD high-impact events by default
+- Adds ICS fields:
+  - DESCRIPTION: Forecast / Previous / Actual / Impact / explanation
+  - LOCATION: Forex Factory
+  - URL: https://www.forexfactory.com/calendar
+- Adds alerts:
+  - 30 minutes before
+  - 5 minutes before
+
+## GitHub Pages setup
+
+Settings → Pages → Deploy from a branch → main → /root
