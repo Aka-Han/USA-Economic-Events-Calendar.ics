@@ -22,7 +22,7 @@ jobs:
           python-version: "3.11"
 
       - name: Generate calendar.ics
-        run: python calendar.py
+        run: python generate_calendar.py
 
       - name: Commit updated calendar
         run: |
