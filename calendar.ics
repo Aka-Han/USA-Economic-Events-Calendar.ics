@@ -1,17 +1,10 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//LiveEconomicCalendar//Placeholder//EN
+PRODID:-//LiveEconomicCalendar//ForexFactory//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-WR-CALNAME:Live Economic Calendar - USD High Impact
-BEGIN:VEVENT
-UID:placeholder@live-economic-calendar
-DTSTAMP:20260608T000000Z
-DTSTART:20260608T160000Z
-DTEND:20260608T163000Z
-SUMMARY:Calendar setup placeholder
-DESCRIPTION:GitHub Actions will replace this file after the first scheduled or manual run.\nForecast: Forex Factory 当天页面为准\nPrevious: Forex Factory 当天页面为准\nImpact: High\n说明: 设置完成后会自动更新。
-LOCATION:Forex Factory
-URL:https://www.forexfactory.com/calendar
-END:VEVENT
+X-WR-TIMEZONE:UTC
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
 END:VCALENDAR
