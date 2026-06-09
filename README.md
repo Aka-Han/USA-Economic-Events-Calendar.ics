@@ -1,4 +1,4 @@
-# USA Economic Events Calendar Subscription
+# USD Economic Events Calendar
 
 这个仓库会自动生成一个可订阅的经济日历 ICS
 
