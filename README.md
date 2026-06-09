@@ -9,8 +9,6 @@
 - 默认只保留 USD 事件
 - 每个事件包含：
   - DESCRIPTION: Forecast / Previous / Impact / Currency / 说明
-  - LOCATION: Forex Factory
-  - URL: https://www.forexfactory.com/calendar
 - 默认提醒：
   - 30 分钟前
   - 5 分钟前
