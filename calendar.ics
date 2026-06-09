@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//ZXSK//ForexFactory Calendar Placeholder//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:ZXSK Forex Factory USD High Impact
+BEGIN:VEVENT
+UID:placeholder@zxsk-ff-calendar
+DTSTAMP:20260608T000000Z
+DTSTART:20260608T160000Z
+DTEND:20260608T163000Z
+SUMMARY:Calendar setup placeholder
+DESCRIPTION:GitHub Actions will replace this file after the first scheduled or manual run.\nForecast: Forex Factory 当天页面为准\nPrevious: Forex Factory 当天页面为准\nImpact: High\n说明: 设置完成后会自动更新。
+LOCATION:Forex Factory
+URL:https://www.forexfactory.com/calendar
+END:VEVENT
+END:VCALENDAR
