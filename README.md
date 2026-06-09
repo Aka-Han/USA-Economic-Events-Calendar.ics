@@ -3,7 +3,7 @@
 Public calendar page:
 
 ```
-https://Z-X-S-K.github.io/ZXSK/
+https://Z-X-S-K.github.io/Live-Economic-Calendar/
 ```
 
 ## What it does
