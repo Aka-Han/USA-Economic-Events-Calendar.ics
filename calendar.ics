@@ -7,4 +7,158 @@ X-WR-CALNAME:Live Economic Calendar - USD High Impact
 X-WR-TIMEZONE:UTC
 REFRESH-INTERVAL;VALUE=DURATION:PT6H
 X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:a77c2c44-80c8-5686-a7bf-3a4ecc675a5d@live-economic-calendar
+DTSTAMP:20260609T022059Z
+DTSTART:20260610T123000Z
+DTEND:20260610T130000Z
+SUMMARY:USD Core CPI m/m
+DESCRIPTION:Forecast: 0.3%\nPrevious: 0.4%\nActual: 未公布\nCurrency: USD\nI
+ mpact: High\n说明: 通胀核心数据；高于预期通常推高美元和美债收益率，压制黄金/风险资产，具体取决于市场定价。\n备注: Forec
+ ast / Previous / Actual 会随 Forex Factory feed 更新；交易前请打开 URL 复核。
+LOCATION:Forex Factory
+URL:https://www.forexfactory.com/calendar
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:30分钟后: USD Core CPI m/m
+END:VALARM
+BEGIN:VALARM
+TRIGGER:-PT5M
+ACTION:DISPLAY
+DESCRIPTION:5分钟后: USD Core CPI m/m
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:122c3cca-edf4-5fc5-a32d-e04022735884@live-economic-calendar
+DTSTAMP:20260609T022059Z
+DTSTART:20260610T123000Z
+DTEND:20260610T130000Z
+SUMMARY:USD Core CPI y/y
+DESCRIPTION:Forecast: 2.9%\nPrevious: 2.8%\nActual: 未公布\nCurrency: USD\nI
+ mpact: High\n说明: 通胀核心数据；高于预期通常推高美元和美债收益率，压制黄金/风险资产，具体取决于市场定价。\n备注: Forec
+ ast / Previous / Actual 会随 Forex Factory feed 更新；交易前请打开 URL 复核。
+LOCATION:Forex Factory
+URL:https://www.forexfactory.com/calendar
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:30分钟后: USD Core CPI y/y
+END:VALARM
+BEGIN:VALARM
+TRIGGER:-PT5M
+ACTION:DISPLAY
+DESCRIPTION:5分钟后: USD Core CPI y/y
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ae581e3a-6859-5c2f-a4a6-83acb41b604d@live-economic-calendar
+DTSTAMP:20260609T022059Z
+DTSTART:20260610T123000Z
+DTEND:20260610T130000Z
+SUMMARY:USD CPI m/m
+DESCRIPTION:Forecast: 0.5%\nPrevious: 0.6%\nActual: 未公布\nCurrency: USD\nI
+ mpact: High\n说明: 通胀核心数据；高于预期通常推高美元和美债收益率，压制黄金/风险资产，具体取决于市场定价。\n备注: Forec
+ ast / Previous / Actual 会随 Forex Factory feed 更新；交易前请打开 URL 复核。
+LOCATION:Forex Factory
+URL:https://www.forexfactory.com/calendar
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:30分钟后: USD CPI m/m
+END:VALARM
+BEGIN:VALARM
+TRIGGER:-PT5M
+ACTION:DISPLAY
+DESCRIPTION:5分钟后: USD CPI m/m
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:11974d4b-16da-5887-be3b-4d829ab55149@live-economic-calendar
+DTSTAMP:20260609T022059Z
+DTSTART:20260610T123000Z
+DTEND:20260610T130000Z
+SUMMARY:USD CPI y/y
+DESCRIPTION:Forecast: 4.2%\nPrevious: 3.8%\nActual: 未公布\nCurrency: USD\nI
+ mpact: High\n说明: 通胀核心数据；高于预期通常推高美元和美债收益率，压制黄金/风险资产，具体取决于市场定价。\n备注: Forec
+ ast / Previous / Actual 会随 Forex Factory feed 更新；交易前请打开 URL 复核。
+LOCATION:Forex Factory
+URL:https://www.forexfactory.com/calendar
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:30分钟后: USD CPI y/y
+END:VALARM
+BEGIN:VALARM
+TRIGGER:-PT5M
+ACTION:DISPLAY
+DESCRIPTION:5分钟后: USD CPI y/y
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:55bdfe1c-7cd4-5ae5-adac-a141d05d5e1f@live-economic-calendar
+DTSTAMP:20260609T022059Z
+DTSTART:20260611T123000Z
+DTEND:20260611T130000Z
+SUMMARY:USD Core PPI m/m
+DESCRIPTION:Forecast: 0.5%\nPrevious: 1.0%\nActual: 未公布\nCurrency: USD\nI
+ mpact: High\n说明: 上游价格压力数据；可能影响 CPI/PCE 预期。\n备注: Forecast / Previous / Ac
+ tual 会随 Forex Factory feed 更新；交易前请打开 URL 复核。
+LOCATION:Forex Factory
+URL:https://www.forexfactory.com/calendar
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:30分钟后: USD Core PPI m/m
+END:VALARM
+BEGIN:VALARM
+TRIGGER:-PT5M
+ACTION:DISPLAY
+DESCRIPTION:5分钟后: USD Core PPI m/m
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:5d392c27-69a6-52e4-9746-93b986c745ec@live-economic-calendar
+DTSTAMP:20260609T022059Z
+DTSTART:20260611T123000Z
+DTEND:20260611T130000Z
+SUMMARY:USD PPI m/m
+DESCRIPTION:Forecast: 0.7%\nPrevious: 1.4%\nActual: 未公布\nCurrency: USD\nI
+ mpact: High\n说明: 上游价格压力数据；可能影响 CPI/PCE 预期。\n备注: Forecast / Previous / Ac
+ tual 会随 Forex Factory feed 更新；交易前请打开 URL 复核。
+LOCATION:Forex Factory
+URL:https://www.forexfactory.com/calendar
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:30分钟后: USD PPI m/m
+END:VALARM
+BEGIN:VALARM
+TRIGGER:-PT5M
+ACTION:DISPLAY
+DESCRIPTION:5分钟后: USD PPI m/m
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:c16f8354-7ffe-5ae4-863b-bcc6d36eba21@live-economic-calendar
+DTSTAMP:20260609T022059Z
+DTSTART:20260611T123000Z
+DTEND:20260611T130000Z
+SUMMARY:USD Unemployment Claims
+DESCRIPTION:Forecast: 220K\nPrevious: 225K\nActual: 未公布\nCurrency: USD\nI
+ mpact: Medium\n说明: 劳动力市场核心数据；会影响美元、美债、黄金、股指。\n备注: Forecast / Previous / 
+ Actual 会随 Forex Factory feed 更新；交易前请打开 URL 复核。
+LOCATION:Forex Factory
+URL:https://www.forexfactory.com/calendar
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:30分钟后: USD Unemployment Claims
+END:VALARM
+BEGIN:VALARM
+TRIGGER:-PT5M
+ACTION:DISPLAY
+DESCRIPTION:5分钟后: USD Unemployment Claims
+END:VALARM
+END:VEVENT
 END:VCALENDAR
