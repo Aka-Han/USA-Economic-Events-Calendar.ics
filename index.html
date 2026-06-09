@@ -16,9 +16,7 @@
       --green: #22c55e;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -38,7 +36,7 @@
     .container {
       width: 100%;
       max-width: 860px;
-      background: rgba(23, 26, 35, 0.86);
+      background: rgba(23, 26, 35, 0.88);
       border: 1px solid var(--line);
       border-radius: 24px;
       padding: 42px;
@@ -161,21 +159,10 @@
     }
 
     @media (max-width: 720px) {
-      .container {
-        padding: 28px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .buttons {
-        flex-direction: column;
-      }
-
-      .button {
-        width: 100%;
-      }
+      .container { padding: 28px; }
+      .grid { grid-template-columns: 1fr; }
+      .buttons { flex-direction: column; }
+      .button { width: 100%; }
     }
   </style>
 </head>
@@ -196,8 +183,8 @@
     </p>
 
     <div class="buttons">
-      <a class="button" href="calendar.ics">Download ICS</a>
-      <a class="button secondary" href="webcal://aka-han.github.io/ZXSK/calendar.ics">Subscribe on Apple Calendar</a>
+      <a class="button" id="download-link" href="calendar.ics">Download ICS</a>
+      <a class="button secondary" id="apple-link" href="#">Subscribe on Apple Calendar</a>
       <a class="button secondary" href="https://calendar.google.com/calendar/u/0/r/settings/addbyurl">Add to Google Calendar</a>
       <a class="button secondary" href="https://www.forexfactory.com/calendar">Forex Factory</a>
     </div>
@@ -215,7 +202,7 @@
 
       <div class="card">
         <strong>Subscription URL</strong>
-        <span><code>https://aka-han.github.io/ZXSK/calendar.ics</code></span>
+        <span><code id="calendar-url">Loading...</code></span>
       </div>
     </section>
 
@@ -224,8 +211,19 @@
       Settings → Apps → Calendar → Calendar Accounts → Add Account → Other → Add Subscribed Calendar → paste the subscription URL.
       <br><br>
       <strong>Google Calendar:</strong><br>
-      Settings → Add calendar → From URL → paste <code>https://aka-han.github.io/ZXSK/calendar.ics</code>.
+      Settings → Add calendar → From URL → paste <code id="google-url">Loading...</code>.
     </div>
   </main>
+
+  <script>
+    const baseUrl = window.location.href.replace(/index\.html$/, '').replace(/\/$/, '');
+    const calendarUrl = baseUrl + '/calendar.ics';
+    const webcalUrl = calendarUrl.replace(/^https?:\/\//, 'webcal://');
+
+    document.getElementById('calendar-url').textContent = calendarUrl;
+    document.getElementById('google-url').textContent = calendarUrl;
+    document.getElementById('download-link').href = calendarUrl;
+    document.getElementById('apple-link').href = webcalUrl;
+  </script>
 </body>
 </html>
