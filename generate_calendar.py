@@ -18,7 +18,11 @@ CALENDAR_NAME = "Live Economic Calendar - USD High Impact"
 FF_URL = "https://www.forexfactory.com/calendar"
 LOCATION = "Forex Factory"
 
+# Forex Factory feed uses "country" as the currency code, e.g. "USD", "EUR", "JPY".
 KEEP_CURRENCIES = {"USD"}
+
+# Keep only high-impact events.
+# If you want all USD events, change this to: set()
 KEEP_IMPACTS = {"High"}
 
 IMPORTANT_KEYWORDS = [
@@ -50,6 +54,10 @@ def fetch_json() -> list[dict]:
 def clean_text(value) -> str:
     return "" if value is None else str(value).strip()
 
+def get_currency(item: dict) -> str:
+    # Forex Factory JSON currently uses "country" for currency code.
+    return clean_text(item.get("currency") or item.get("country")).upper()
+
 def escape_ics(text: str) -> str:
     return (
         text.replace("\\", "\\\\")
@@ -72,39 +80,22 @@ def fold_ics_line(line: str) -> str:
     return "\r\n".join(parts)
 
 def parse_datetime(item: dict) -> datetime | None:
-    for key in ("date", "datetime", "timestamp"):
-        val = item.get(key)
-        if not val:
-            continue
+    val = item.get("date") or item.get("datetime") or item.get("timestamp")
+    if not val:
+        return None
 
-        if isinstance(val, (int, float)):
-            return datetime.fromtimestamp(val, tz=timezone.utc)
+    if isinstance(val, (int, float)):
+        return datetime.fromtimestamp(val, tz=timezone.utc)
 
-        s = str(val).strip()
+    s = str(val).strip()
 
-        try:
-            dt = datetime.fromisoformat(s.replace("Z", "+00:00"))
-            if dt.tzinfo is None:
-                dt = dt.replace(tzinfo=timezone.utc)
-            return dt.astimezone(timezone.utc)
-        except Exception:
-            pass
-
-        for fmt in (
-            "%Y-%m-%dT%H:%M:%S%z",
-            "%Y-%m-%d %H:%M:%S%z",
-            "%Y-%m-%d %H:%M:%S",
-            "%Y-%m-%d %H:%M",
-        ):
-            try:
-                dt = datetime.strptime(s, fmt)
-                if dt.tzinfo is None:
-                    dt = dt.replace(tzinfo=timezone.utc)
-                return dt.astimezone(timezone.utc)
-            except Exception:
-                continue
-
-    return None
+    try:
+        dt = datetime.fromisoformat(s.replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc)
+    except Exception:
+        return None
 
 def get_impact(item: dict) -> str:
     impact = clean_text(item.get("impact") or item.get("importance"))
@@ -125,11 +116,11 @@ def event_title(item: dict) -> str:
         or item.get("headline")
         or "Forex Factory Event"
     )
-    currency = clean_text(item.get("currency"))
+    currency = get_currency(item)
     return f"{currency} {clean_text(title)}".strip()
 
 def should_keep(item: dict) -> bool:
-    currency = clean_text(item.get("currency")).upper()
+    currency = get_currency(item)
     impact = get_impact(item)
 
     if KEEP_CURRENCIES and currency not in KEEP_CURRENCIES:
@@ -173,16 +164,14 @@ def build_description(item: dict) -> str:
     forecast = clean_text(item.get("forecast")) or "Forex Factory 当天页面为准"
     previous = clean_text(item.get("previous")) or "Forex Factory 当天页面为准"
     actual = clean_text(item.get("actual")) or "未公布"
-    currency = clean_text(item.get("currency"))
+    currency = get_currency(item)
     impact = get_impact(item) or "High"
-    country = clean_text(item.get("country"))
 
     return (
         f"Forecast: {forecast}\n"
         f"Previous: {previous}\n"
         f"Actual: {actual}\n"
         f"Currency: {currency}\n"
-        f"Country: {country}\n"
         f"Impact: {impact}\n"
         f"说明: {explain_event(title)}\n"
         f"备注: Forecast / Previous / Actual 会随 Forex Factory feed 更新；交易前请打开 URL 复核。"
@@ -203,6 +192,7 @@ def create_ics(events: list[dict]) -> str:
     ]
 
     seen = set()
+    kept_count = 0
 
     for item in events:
         if not should_keep(item):
@@ -218,6 +208,7 @@ def create_ics(events: list[dict]) -> str:
             continue
         seen.add(key)
 
+        kept_count += 1
         end_dt = start_dt + timedelta(minutes=30)
         uid_seed = f"{start_dt.isoformat()}-{title}"
         uid = f"{uuid.uuid5(uuid.NAMESPACE_URL, uid_seed)}@live-economic-calendar"
@@ -246,6 +237,7 @@ def create_ics(events: list[dict]) -> str:
         ])
 
     lines.append("END:VCALENDAR")
+    print(f"Kept events: {kept_count}")
     return "\r\n".join(fold_ics_line(line) for line in lines) + "\r\n"
 
 def main() -> int:
